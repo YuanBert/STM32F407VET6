@@ -119,6 +119,7 @@ int main(void)
   MX_NVIC_Init();
 
   /* USER CODE BEGIN 2 */
+  HAL_TIM_Base_Start_IT(&htim5);
   HAL_I2C_Master_Transmit(&hi2c1,DAC5571_ADDR_Write,gDACbuffer,2,0xFFFF);
 
   /* USER CODE END 2 */
@@ -132,6 +133,7 @@ int main(void)
   /* USER CODE BEGIN 3 */
     printf("\r\n welcome to STMF407xx \r\n");
     HAL_Delay(500);
+    
 
   }
   /* USER CODE END 3 */
@@ -212,6 +214,24 @@ static void MX_NVIC_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+/**
+  * @brief  Period elapsed callback in non blocking mode 
+  * @param  htim pointer to a TIM_HandleTypeDef structure that contains
+  *                the configuration information for TIM module.
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(htim);
+  /* NOTE : This function Should not be modified, when the callback is needed,
+            the __HAL_TIM_PeriodElapsedCallback could be implemented in the user file
+   */
+  if(htim5.Instance ==  htim->Instance)
+  {
+    HAL_GPIO_TogglePin(GPIOA,D2_Pin);
+  }
+}
 
 /* USER CODE END 4 */
 
